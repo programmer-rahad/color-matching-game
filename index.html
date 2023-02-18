@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Important Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Website Title -->
+    <title>Color Game (03-08-2020) </title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/normalize.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+<body>
+    <section class="wrapper">
+        <h1>
+            <span class="ttu">Color Matching Game</span>
+            <span class="rgb-color ttu">RGB(203,99,122)</span>
+            <span class="author" style="font-weight: 900">Author: <a href="#">Rahad</a></span>
+        </h1>
+        <div class="options-btn ttu">
+            <table class="new-1">
+                <tr>
+                    <td><button class="play-again">Play Again</button></td>
+                    <td><span class="result">Corrrect !</span><span class="try-again">Try again!</span></td>
+                    <td>
+                        <button class="level-easy current-level">Easy</button>
+                        <button class="level-medium">Medium</button>
+                        <button class="level-hard">Hard</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="color-box-wrap">
+            <div class="color-boxs fix">
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+                <div class="single-box"></div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var displayRGB = document.querySelector('.rgb-color');
+        var colorBoxs = document.querySelectorAll('.color-boxs .single-box');
+        var DicsoColors = ['yellow', 'blue', '#E4C029', 'deeppink'];
+        var result = document.querySelector('.result');
+        var tryAgain = document.querySelector('.try-again');
+        var playAgain = document.querySelector('.options-btn .play-again');
+        var levelEasy = document.querySelector('.options-btn .level-easy');
+        var levelMedium = document.querySelector('.options-btn .level-medium');
+        var levelHard = document.querySelector('.options-btn .level-hard');
+        var pickedColor;
+        var level = 'easy';
+
+        var colors;
+
+        var colorsForEasyLevel = [
+            'silver', 'gray', 'black', 'red', 'maroon', 'yellow', 'olive', 'green', 'aqua', 'blue',
+            'navy', 'purple', 'darkblue', 'darkgreen', 'darkorange', 'darkred', 'pink', 'deeppink', 'khaki',
+            'lightblue', 'lightgreen', 'violet'
+        ]
+        playAgain.addEventListener('click', function (e) {
+            if (level === 'easy' || level === 'hard') {
+                mainFunction(9);
+            } else {
+                mainFunction(6);
+            }
+            colorBoxs.forEach(function (box) {
+                box.style.transform = 'scale(1)';
+            });
+        });
+        levelEasy.addEventListener('click', function (e) {
+            level = 'easy';
+            mainFunction(9);
+            this.classList.add('current-level');
+            levelMedium.classList.remove('current-level');
+            levelHard.classList.remove('current-level');
+            colorBoxs.forEach(function (box) {
+                box.style.transform = 'scale(1)';
+            });
+        });
+        levelMedium.addEventListener('click', function () {
+            level = 'medium';
+            mainFunction(6);
+            this.classList.add('current-level');
+            levelEasy.classList.remove('current-level');
+            levelHard.classList.remove('current-level');
+            colorBoxs.forEach(function (box) {
+                box.style.transform = 'scale(1)';
+            });
+        });
+        levelHard.addEventListener('click', function (e) {
+            level = 'hard';
+            mainFunction(9);
+            this.classList.add('current-level');
+            levelEasy.classList.remove('current-level');
+            levelMedium.classList.remove('current-level');
+            colorBoxs.forEach(function (box) {
+                box.style.transform = 'scale(1)';
+            });
+        });
+
+        function mainFunction(limit) {
+            colors = [];
+            for (var i = 0; i < limit; i++) {
+                if (level === 'easy') {
+                    colors.push(
+                        colorsForEasyLevel[Math.floor(Math.random() * colorsForEasyLevel.length)]
+                    );
+                    colorBoxs.forEach(function (box, i) {
+                        if (i === 6 || i === 7 || i === 8) {
+                            box.style.display = 'block'
+                        }
+                    });
+                } else {
+                    if (level == 'medium') {
+                        colorBoxs.forEach(function (box, i) {
+                            if (i === 6 || i === 7 || i === 8) {
+                                box.style.display = 'none'
+                            }
+                        });
+                    } else {
+                        colorBoxs.forEach(function (box, i) {
+                            if (i === 6 || i === 7 || i === 8) {
+                                box.style.display = 'block'
+                            }
+                        });
+                    }
+                    colors.push(
+                        'rgb(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' +
+                        Math.floor(Math.random() * 256) + ')'
+                    );
+                }
+            }
+            console.log(colors);
+            pickedColor = colors[Math.floor(Math.random() * colors.length)];
+
+            displayRGB.innerHTML = pickedColor;
+            displayRGB.style.backgroundColor = '#e1b912';
+            result.style.cssText = 'transform: scale(0)';
+
+            colors.forEach(function (undefined, i) {
+                colorBoxs[i].style.backgroundColor = colors[i];
+            });
+
+        }
+        mainFunction(9);
+
+        // Event Listener 
+        colorBoxs.forEach(function (box) {
+            box.addEventListener('click', function (e) {
+                var thisBg = this.style.backgroundColor;
+                if (thisBg === pickedColor) {
+                    colorBoxs.forEach(function (box) {
+                        box.style.transform = 'scale(1)';
+                        box.style.backgroundColor = pickedColor;
+                    });
+
+                    result.style.cssText = 'transform: scale(1)';
+                } else {
+                    this.style.transform = 'scale(0)';
+                    tryAgain.style.transform = 'scale(1)';
+                    setTimeout(function () {
+                        tryAgain.style.transform = 'scale(0)';
+                    }, 500);
+                }
+            });
+        });
+
+        // Disco Background
+        !(function () {
+            let i = 0;
+            var c = setInterval(() => {
+                document.body.style.backgroundColor = colors[i];
+                i = (i === colors.length - 1) ? 0 : i;
+                i++;
+                setTimeout(() => {
+                    clearInterval(c);
+                }, String(colors.length - 1 + "000"));
+            }, 1000);
+        })();
+        // Disco Background End
+    </script>
+</body>
+
+</html>
